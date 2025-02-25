@@ -1,6 +1,6 @@
 CC      = cc
 CFLAGS  = -Wall -Wextra -Werror
-SRC     = pipex_util/child.c pipex_util/ft_split.c pipex_util/lib_fonc.c pipex.c
+SRC     = pipex_util/child.c pipex_util/ft_split.c pipex_util/lib_fonc.c pipex_util/str_trim.c pipex.c
 OBJ     = $(SRC:.c=.o)
 NAME    = pipex
 

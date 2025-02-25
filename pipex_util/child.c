@@ -6,7 +6,7 @@
 /*   By: mgarouj <mgarouj@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/22 04:42:52 by mgarouj           #+#    #+#             */
-/*   Updated: 2025/02/25 15:41:19 by mgarouj          ###   ########.fr       */
+/*   Updated: 2025/02/25 20:32:29 by mgarouj          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -74,10 +74,15 @@ void	child(char **v, t_data *data, char **env)
 {
 	int		fd;
 	char	*path;
+	char	*free_check;
 
 	fd = open(v[1], O_RDONLY);
 	if (fd == -1)
 		error("cant open fd\n", NULL, NULL);
+	free_check = ft_strtrim(v[2], " ");
+	if ((ft_strlen(free_check)) != ft_strlen(v[2]))
+		error("ERROR: command not found \n", data->cmd, NULL);
+	free(free_check);
 	data->cmd = ft_split(v[2], ' ');
 	if (!check_cmd(data->cmd[0]))
 		error("error in cmd \n", data->cmd, NULL);

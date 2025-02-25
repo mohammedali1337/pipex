@@ -6,7 +6,7 @@
 /*   By: mgarouj <mgarouj@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/17 15:44:58 by mgarouj           #+#    #+#             */
-/*   Updated: 2025/02/25 10:31:54 by mgarouj          ###   ########.fr       */
+/*   Updated: 2025/02/25 20:18:45 by mgarouj          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,4 +37,5 @@ int		ft_strlen(const char *s);
 char	*find_path(char *cmd, char **env);
 int		check_cmd(char *cmd);
 int		ft_isalpha(int c);
+char	*ft_strtrim(char const *s1, char const *set);
 #endif
