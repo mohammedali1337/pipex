@@ -6,7 +6,7 @@
 /*   By: mgarouj <mgarouj@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/22 04:42:52 by mgarouj           #+#    #+#             */
-/*   Updated: 2025/02/25 20:32:29 by mgarouj          ###   ########.fr       */
+/*   Updated: 2025/02/26 12:19:02 by mgarouj          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,6 +56,7 @@ int	ft_isalpha(int c)
 	return ((c >= 'a' && c <= 'z')
 		|| (c >= 'A' && c <= 'Z'));
 }
+
 int	check_cmd(char *cmd)
 {
 	int	i;
@@ -80,12 +81,12 @@ void	child(char **v, t_data *data, char **env)
 	if (fd == -1)
 		error("cant open fd\n", NULL, NULL);
 	free_check = ft_strtrim(v[2], " ");
-	if ((ft_strlen(free_check)) != ft_strlen(v[2]))
+	if ((ft_strlen(free_check)) != ft_strlen(v[2]) || !v[2][0] || !v[3][0])
 		error("ERROR: command not found \n", data->cmd, NULL);
 	free(free_check);
 	data->cmd = ft_split(v[2], ' ');
 	if (!check_cmd(data->cmd[0]))
-		error("error in cmd \n", data->cmd, NULL);
+		error("ERROR: command not found \n", data->cmd, NULL);
 	dup2(fd, 0);
 	close(fd);
 	close(data->pipefd[0]);
@@ -95,9 +96,5 @@ void	child(char **v, t_data *data, char **env)
 	if (!path)
 		error("ERROR: command not found \n", data->cmd, NULL);
 	execve(path, data->cmd, env);
-	
-	error("ERROR: execve failde \n",data->cmd, NULL);
+	error("ERROR: execve failde \n", data->cmd, NULL);
 }
-// //bash-3.2$ ls < /dev/stdout | ls > /dev/stdout 
-// bash: /dev/stdout: Permission denied
-// Makefile        infile          outfile         pipex           pipex.c         pipex.h         pipex.o         pipex_util

@@ -6,7 +6,7 @@
 /*   By: mgarouj <mgarouj@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/17 15:46:20 by mgarouj           #+#    #+#             */
-/*   Updated: 2025/02/25 20:35:48 by mgarouj          ###   ########.fr       */
+/*   Updated: 2025/02/26 12:22:41 by mgarouj          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,21 +45,21 @@ void	parent(char **v, t_data *data, char **env)
 	char	*path;
 	char	*free_check;
 
+	if (!v[3][0])
+		exit(1);
 	fd = open(v[4], O_CREAT | O_WRONLY | O_TRUNC, 0644);
 	if (fd < 0)
 		error("cant open fd\n", NULL, NULL);
-		free_check = ft_strtrim(v[3], " ");
+	free_check = ft_strtrim(v[3], " ");
 	if ((ft_strlen(free_check)) != ft_strlen(v[3]))
 		error("ERROR: command not found \n", data->cmd, NULL);
 	free(free_check);
 	cmd = ft_split(v[3], ' ');
 	if (!check_cmd(cmd[0]))
-		error("invalide cmd\n", cmd, NULL);
+		error("ERROR: command not found \n", cmd, NULL);
 	close(data->pipefd[1]);
-	dup2(data->pipefd[0], 0);
-	dup2(fd, 1);
-	close(data->pipefd[0]);
-	close(fd);
+	(dup2(data->pipefd[0], 0), dup2(fd, 1));
+	(close(data->pipefd[0]), close(fd));
 	path = find_path(cmd[0], env);
 	if (!path)
 		error("ERROR: command not found \n", cmd, NULL);
@@ -67,15 +67,10 @@ void	parent(char **v, t_data *data, char **env)
 	error("ERROR: execve failde \n", NULL, NULL);
 }
 
-// void f()
-// {
-// 	system("lsof -c pipex");
-// }
 int	main(int c, char **v, char **env)
 {
 	t_data	data;
 
-	// atexit(f);
 	if (c != 5)
 		error("invalide number of argument \n", NULL, NULL);
 	if (!env)
@@ -94,6 +89,6 @@ int	main(int c, char **v, char **env)
 			parent(v, &data, env);
 	}
 	waitpid(data.pid, NULL, 0);
-	// waitpid(data.pid2, NULL, 0);
+	(close(data.pipefd[0]), close(data.pipefd[1]));
 	return (0);
 }
