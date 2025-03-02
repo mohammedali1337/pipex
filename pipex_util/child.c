@@ -6,7 +6,7 @@
 /*   By: mgarouj <mgarouj@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/22 04:42:52 by mgarouj           #+#    #+#             */
-/*   Updated: 2025/03/01 01:49:24 by mgarouj          ###   ########.fr       */
+/*   Updated: 2025/03/02 16:50:16 by mgarouj          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,8 +33,10 @@ char	*find_path(char *cmd, char **env)
 	char	*full_path;
 	int		i;
 
-	if (access(cmd, X_OK | F_OK) == 0)
+	if (access(cmd, X_OK) == 0)
 		return (cmd);
+	if (!check_cmd(cmd))
+		return (NULL);
 	path_env = get_path(env);
 	paths = ft_split(path_env, ':');
 	if (!paths)
@@ -79,22 +81,20 @@ void	child(char **v, t_data data, char **env)
 
 	fd = open(v[1], O_RDONLY);
 	if (fd == -1)
-		error("cant open fd\n", NULL, NULL);
+		error(NULL, NULL, NULL, 1);
 	free_check = ft_strtrim(v[2], " ");
-	if ((ft_strlen(free_check)) != ft_strlen(v[2]) || !v[2][0] || !v[3][0])
-		error("ERROR: command not found \n", data.cmd, NULL);
+	if ((ft_strlen(free_check)) != ft_strlen(v[2]) || !v[2][0])
+		(close(fd), error("ERROR: command not found \n", data.cmd, NULL, 0));
 	free(free_check);
 	data.cmd = ft_split(v[2], ' ');
-	if (!check_cmd(data.cmd[0]))
-		error("ERROR: command not found \n", data.cmd, NULL);
+	path = find_path(data.cmd[0], env);
+	if (!path)
+		error("ERROR: command not found \n", data.cmd, NULL, 0);
 	dup2(fd, 0);
 	close(fd);
 	close(data.pipefd[0]);
 	dup2(data.pipefd[1], 1);
 	close(data.pipefd[1]);
-	path = find_path(data.cmd[0], env);
-	if (!path)
-		error("ERROR: command not found \n", data.cmd, NULL);
 	execve(path, data.cmd, env);
-	error("ERROR: execve failde \n", data.cmd, NULL);
+	error(NULL, data.cmd, NULL, 1);
 }

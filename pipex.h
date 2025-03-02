@@ -6,7 +6,7 @@
 /*   By: mgarouj <mgarouj@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/17 15:44:58 by mgarouj           #+#    #+#             */
-/*   Updated: 2025/03/01 01:49:40 by mgarouj          ###   ########.fr       */
+/*   Updated: 2025/03/02 16:42:35 by mgarouj          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,10 +32,11 @@ char	**ft_split(char const *s, char c);
 char	*ft_strjoin(char const *s1, char const *s2);
 int		ft_strncmp(const char *s1, const char *s2, size_t n);
 void	child(char **v, t_data data, char **env);
-void	error(char *str, char **f, char *f2);
+void	error(char *str, char **f, char *f2, int flag);
 int		ft_strlen(const char *s);
 char	*find_path(char *cmd, char **env);
 int		check_cmd(char *cmd);
 int		ft_isalpha(int c);
 char	*ft_strtrim(char const *s1, char const *set);
+int		check_cmd(char *cmd);
 #endif
